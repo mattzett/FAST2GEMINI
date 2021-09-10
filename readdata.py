@@ -17,6 +17,7 @@ Invariant latitude (degrees)
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 # read in the data
 filename="/Users/zettergm/Dropbox (Personal)/proposals/UNH_GDC/FASTdata/nightside.txt"
@@ -27,6 +28,26 @@ data=np.loadtxt(file,dtype={
 'formats': ('S1','S1','float','float','float','float','float','float','float','float','float')})
 
 # sort into parameters
-#for k in range(0,data.size):
-#    datanow=data[k]
+eflux=np.empty( data.shape )
+chare=np.empty( data.shape )
+invlat=np.empty( data.shape )
+for k in range(0,data.size):
+    datanow=data[k]
+    eflux[k]=datanow[2]
+    chare[k]=datanow[4]
+    invlat[k]=datanow[-1]
     
+# unit conversions
+elchrg=1.6e-19
+chare=chare/1e7/elchrg
+
+# plot
+plt.figure(dpi=150)
+plt.plot(invlat,eflux)
+plt.xlabel("latitude (deg.)")
+plt.ylabel("energy flux (mW/m$^2$)")
+
+plt.figure(dpi=150)
+plt.plot(invlat,chare)
+plt.xlabel("latitude (deg.)")
+plt.ylabel("energy (eV)")
