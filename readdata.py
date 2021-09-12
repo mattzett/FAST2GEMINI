@@ -37,17 +37,38 @@ for k in range(0,data.size):
     chare[k]=datanow[4]
     invlat[k]=datanow[-1]
     
-# unit conversions
+# unit conversion, ergs to eV
 elchrg=1.6e-19
 chare=chare/1e7/elchrg
 
+# smooth data a bit prior to inserting into model
+lsmooth=2
+efluxsmooth=np.empty(data.shape)
+charesmooth=np.empty(data.shape)
+for k in range(0,data.size):
+    print(chare[k-lsmooth:k+lsmooth])
+    charesmooth[k]=np.average(chare[k-lsmooth:k+lsmooth])
+    efluxsmooth[k]=np.average(eflux[k-lsmooth:k+lsmooth])
+
 # plot
-plt.figure(dpi=150)
+plt.subplots(2,2,dpi=100)
+
+plt.subplot(2,2,1)
 plt.plot(invlat,eflux)
 plt.xlabel("latitude (deg.)")
 plt.ylabel("energy flux (mW/m$^2$)")
 
-plt.figure(dpi=150)
+plt.subplot(2,2,2)
 plt.plot(invlat,chare)
+plt.xlabel("latitude (deg.)")
+plt.ylabel("energy (eV)")
+
+plt.subplot(2,2,3)
+plt.plot(invlat,efluxsmooth)
+plt.xlabel("latitude (deg.)")
+plt.ylabel("energy flux (mW/m$^2$)")
+
+plt.subplot(2,2,4)
+plt.plot(invlat,charesmooth)
 plt.xlabel("latitude (deg.)")
 plt.ylabel("energy (eV)")
